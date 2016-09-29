@@ -1,8 +1,7 @@
 ![PDF Header](https://www.leadtools.com/images/new-site-images/banners/pdf.jpg)
 
 # Convert Images and Documents to PDF
-## demo-cs-convert-to-pdf
-### Convert to Raster and Document Based PDF
+## Convert to Raster and Document Based PDF
 
 An example using LEADTOOLS to convert images and documents to PDF files.  Three methods using LEADTOOLS are shown:
 + Convert image to image-based G4 compressed PDF
