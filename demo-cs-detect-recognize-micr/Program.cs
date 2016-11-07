@@ -10,28 +10,26 @@ using System.IO;
 
 namespace demo_cs_detect_recognize_micr
 {
-   class Program
+   internal static class Program
    {
-      static void Main( string[] args )
+      private static void Main()
       {
-         string inputImagePath = Path.Combine( Leadtools.Demo.Support.Path.GetResourcesPath(), @"MICR_SAMPLE.tif" );
+         var inputImagePath = Path.Combine( Leadtools.Demo.Support.Path.GetResourcesPath(), @"MICR_SAMPLE.tif" );
 
-         bool unlocked = Leadtools.Demo.Support.Licensing.SetLicense();
-         if ( unlocked )
-         {
-            string micr = DetectandRecognizeMICR( inputImagePath );
-            // The default system font does not include the special MICR characters.
-            // Therefore, they are displayed as ?
-            // To display the characters, you have to set the font of console window itself.
-            // To see the actual characters, you can break on the WriteLine() call
-            // and examine the micr string to see the special chars.
+         var unlocked = Leadtools.Demo.Support.Licensing.SetLicense();
+         if (!unlocked) return;
+         var micr = DetectAndRecognizeMicr( inputImagePath );
+         // The default system font does not include the special MICR characters.
+         // Therefore, they are displayed as ?
+         // To display the characters, you have to set the font of console window itself.
+         // To see the actual characters, you can break on the WriteLine() call
+         // and examine the micr string to see the special chars.
 
-            // Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.WriteLine( "MICR: {0}", micr );
-         }
+         // Console.OutputEncoding = System.Text.Encoding.UTF8;
+         Console.WriteLine( "MICR: {0}", micr );
       }
 
-      private static string DetectandRecognizeMICR( string fileName )
+      private static string DetectAndRecognizeMicr( string fileName )
       {
          try
          {
@@ -40,8 +38,10 @@ namespace demo_cs_detect_recognize_micr
             using ( var img = codecs.Load( fileName ) )
             {
                //prepare the MICR detector command and run it
-               var micrDetector = new MICRCodeDetectionCommand();
-               micrDetector.SearchingZone = new LeadRect( 0, 0, img.Width, img.Height );
+               var micrDetector = new MICRCodeDetectionCommand
+               {
+                  SearchingZone = new LeadRect(0, 0, img.Width, img.Height)
+               };
                micrDetector.Run( img );
 
                //See if there is a MICR detected - if not return
@@ -49,17 +49,19 @@ namespace demo_cs_detect_recognize_micr
                   return "No MICR detected in this file.";
 
                //if there is a MICR zone detected startup OCR
-               using ( IOcrEngine ocrEngine = OcrEngineManager.CreateEngine( OcrEngineType.Advantage, false ) )
+               using ( var ocrEngine = OcrEngineManager.CreateEngine( OcrEngineType.Advantage, false ) )
                {
                   ocrEngine.Startup( null, null, null, null );
 
                   //create the OCR Page
-                  IOcrPage ocrPage = ocrEngine.CreatePage( img, OcrImageSharingMode.None );
+                  var ocrPage = ocrEngine.CreatePage( img, OcrImageSharingMode.None );
 
                   //Create the OCR zone for the MICR and add to the Ocr Page and recognize
-                  OcrZone micrZone = new OcrZone();
-                  micrZone.Bounds = LogicalRectangle.FromRectangle( micrDetector.MICRZone );
-                  micrZone.ZoneType = OcrZoneType.Micr;
+                  var micrZone = new OcrZone
+                  {
+                     Bounds = LogicalRectangle.FromRectangle(micrDetector.MICRZone),
+                     ZoneType = OcrZoneType.Micr
+                  };
                   ocrPage.Zones.Add( micrZone );
                   ocrPage.Recognize( null );
 

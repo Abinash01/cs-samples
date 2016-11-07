@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "demo-cs-image-to-bw-pdf" )]
+[assembly: AssemblyTitle( "demo-cs-detect-recognize-micr" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "demo-cs-image-to-bw-pdf" )]
+[assembly: AssemblyProduct( "demo-cs-detect-recognize-micr" )]
 [assembly: AssemblyCopyright( "Copyright ©  2016" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]

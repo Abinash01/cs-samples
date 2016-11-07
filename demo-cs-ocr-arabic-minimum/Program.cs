@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Leadtools;
 using Leadtools.Codecs;
-using Leadtools.Forms;
 using Leadtools.Forms.Ocr;
 using Leadtools.Forms.DocumentWriters;
 using System.IO;
 namespace Minimum_OCR_Console_19
 {
-   class Program
+   internal static class Program
    {
-      static void Main(string[] args)
+      private static void Main(string[] args)
       {
          const string filenameFilter = "*arabic.tif";
          try
          {
             // Set license to unlock support
             Leadtools.Demo.Support.Licensing.SetLicense();
-            string sourceFolder = null;
-            string targetFolder = null;
+            string sourceFolder;
+            string targetFolder;
             if ( args.Length == 2 )
             {
                sourceFolder = args[0];
@@ -34,40 +28,38 @@ namespace Minimum_OCR_Console_19
             }
 
             using ( var codecs = new RasterCodecs() )
-            using ( IOcrEngine ocrEngine = OcrEngineManager.CreateEngine( OcrEngineType.Arabic, false ) )
+            using ( var ocrEngine = OcrEngineManager.CreateEngine( OcrEngineType.Arabic, false ) )
             {
                ocrEngine.Startup( null, null, null, null );
-               using ( IOcrDocument ocrDocument = ocrEngine.DocumentManager.CreateDocument() )
+               using ( var ocrDocument = ocrEngine.DocumentManager.CreateDocument() )
                {
-                  if ( System.IO.Directory.Exists( sourceFolder ) )
+                  if (!Directory.Exists(sourceFolder)) return;
+                  var files = Directory.GetFiles( sourceFolder, filenameFilter, SearchOption.TopDirectoryOnly );
+                  foreach ( var file in files )
                   {
-                     string[] files = Directory.GetFiles( sourceFolder, filenameFilter, SearchOption.TopDirectoryOnly );
-                     foreach ( string file in files )
+                     Console.WriteLine( "Loading " + file );
+                     var targetFileName = Path.Combine( targetFolder, Path.GetFileNameWithoutExtension( file ) + ".txt" );
+                     using ( var image = codecs.Load( file ) )
                      {
-                        Console.WriteLine( "Loading " + file );
-                        string TargetFileName = Path.Combine( targetFolder, Path.GetFileNameWithoutExtension( file ) + ".txt" );
-                        using ( RasterImage image = codecs.Load( file ) )
+                        if ( image.PageCount == 1 )
                         {
-                           if ( image.PageCount == 1 )
-                           {
-                              ocrDocument.Pages.AddPage( image, null );
-                              Console.WriteLine( "Starting OCR" );
-                              ocrDocument.Pages[0].Recognize( null );
-                              ocrDocument.Save( TargetFileName, DocumentFormat.Text, null );
-                           }
-                           else
-                           {
-                              ocrDocument.Pages.AddPages( image, 1, image.PageCount, null );
-                              Console.WriteLine( "Starting OCR" );
-                              foreach ( Leadtools.Forms.Ocr.IOcrPage page in ocrDocument.Pages )
-                              {
-                                 page.Recognize( null );
-                                 ocrDocument.Save( TargetFileName, DocumentFormat.Text, null );
-                              }
-                           }
-                           ocrDocument.Pages.Clear();
-                           Console.WriteLine( "Finished OCR\r\nSaved " + TargetFileName );
+                           ocrDocument.Pages.AddPage( image, null );
+                           Console.WriteLine( "Starting OCR" );
+                           ocrDocument.Pages[0].Recognize( null );
+                           ocrDocument.Save( targetFileName, DocumentFormat.Text, null );
                         }
+                        else
+                        {
+                           ocrDocument.Pages.AddPages( image, 1, image.PageCount, null );
+                           Console.WriteLine( "Starting OCR" );
+                           foreach ( var page in ocrDocument.Pages )
+                           {
+                              page.Recognize( null );
+                              ocrDocument.Save( targetFileName, DocumentFormat.Text, null );
+                           }
+                        }
+                        ocrDocument.Pages.Clear();
+                        Console.WriteLine( "Finished OCR\r\nSaved " + targetFileName );
                      }
                   }
                }

@@ -1,5 +1,4 @@
 using System;
-using Leadtools;
 
 namespace Leadtools.Demo
 {
@@ -11,14 +10,14 @@ namespace Leadtools.Demo
       {
          /* TODO: Change this to use your license file and developer key */
          /* Do not distribute your developer key in a file like this.  This is just for demo purposes. */
-         private const string LicenseFilePath = @"D:\GitHub\LEADTOOLS\cs-samples\common-files\eval-license-files.lic";
-         private const string DeveloperKeyPath = @"D:\GitHub\LEADTOOLS\cs-samples\common-files\eval-license-files.lic.key";
+         private const string LicenseFilePath = @"C:\LEADTOOLS 19\Common\License\leadtools.lic";
+         private const string DeveloperKeyPath = @"C:\LEADTOOLS 19\Common\License\leadtools.lic.key";
 
-         public static bool SetLicense( bool silent )
+         public static bool SetLicense( bool silent = false)
          {
             try
             {
-               string developerKey = System.IO.File.ReadAllText( DeveloperKeyPath );
+               var developerKey = System.IO.File.ReadAllText( DeveloperKeyPath );
                RasterSupport.SetLicense( LicenseFilePath, developerKey );
             }
             catch ( Exception ex )
@@ -28,53 +27,46 @@ namespace Leadtools.Demo
 
             if ( RasterSupport.KernelExpired )
             {
-               string dir = System.IO.Path.GetDirectoryName( System.Reflection.Assembly.GetExecutingAssembly().Location );
+               var dir = System.IO.Path.GetDirectoryName( System.Reflection.Assembly.GetExecutingAssembly().Location );
                /* Try the common LIC directory */
-               string licenseFileRelativePath = System.IO.Path.Combine( dir, Path.RelativePathToRoot, "common-files\\leadtools-license\\eval-license-files.LIC" );
-               string keyFileRelativePath = System.IO.Path.Combine( dir, Path.RelativePathToRoot, "common-files\\leadtools-license\\eval-license-files.LIC.key" );
-
-               if ( System.IO.File.Exists( licenseFileRelativePath ) && System.IO.File.Exists( keyFileRelativePath ) )
+               if (dir != null)
                {
-                  string developerKey = System.IO.File.ReadAllText( keyFileRelativePath );
-                  try
+                  var licenseFileRelativePath = System.IO.Path.Combine( dir, Path.RelativePathToRoot, "common-files\\leadtools-license\\eval-license-files.LIC" );
+                  var keyFileRelativePath = System.IO.Path.Combine( dir, Path.RelativePathToRoot, "common-files\\leadtools-license\\eval-license-files.LIC.key" );
+
+                  if ( System.IO.File.Exists( licenseFileRelativePath ) && System.IO.File.Exists( keyFileRelativePath ) )
                   {
-                     RasterSupport.SetLicense( licenseFileRelativePath, developerKey );
-                  }
-                  catch ( Exception ex )
-                  {
-                     System.Diagnostics.Debug.Write( ex.Message );
+                     var developerKey = System.IO.File.ReadAllText( keyFileRelativePath );
+                     try
+                     {
+                        RasterSupport.SetLicense( licenseFileRelativePath, developerKey );
+                     }
+                     catch ( Exception ex )
+                     {
+                        System.Diagnostics.Debug.Write( ex.Message );
+                     }
                   }
                }
             }
 
-            if ( RasterSupport.KernelExpired )
-            {
-               if ( silent == false )
-               {
-                  string msg = "Your license file is missing, invalid, or expired. LEADTOOLS will not function.\nPlease contact sales@leadtools.com for information on obtaining a valid license.";
-                  string logmsg = string.Format( "*** NOTE: {0} ***{1}", msg, Environment.NewLine );
-                  System.Diagnostics.Debugger.Log( 0, null, "*******************************************************************************" + Environment.NewLine );
-                  System.Diagnostics.Debugger.Log( 0, null, logmsg );
-                  System.Diagnostics.Debugger.Log( 0, null, "*******************************************************************************" + Environment.NewLine );
+            if (!RasterSupport.KernelExpired) return true;
+            if (silent) return false;
+            const string msg = "Your license file is missing, invalid, or expired. LEADTOOLS will not function.\nPlease contact sales@leadtools.com for information on obtaining a valid license.";
+            var logmsg = string.Format( "*** NOTE: {0} ***{1}", msg, Environment.NewLine );
+            System.Diagnostics.Debugger.Log( 0, null, "*******************************************************************************" + Environment.NewLine );
+            System.Diagnostics.Debugger.Log( 0, null, logmsg );
+            System.Diagnostics.Debugger.Log( 0, null, "*******************************************************************************" + Environment.NewLine );
 
-                  Console.WriteLine( msg );
-                  Path.ShellExecute( NewEvaluationLicenseUrl );
-               }
-               return false;
-            }
-            return true;
-         }
-
-         public static bool SetLicense()
-         {
-            return SetLicense( false );
+            Console.WriteLine( msg );
+            Path.ShellExecute( NewEvaluationLicenseUrl );
+            return false;
          }
       }
 
       internal static class Path
       {
          public const string RelativePathToRoot = "..\\..";
-         public const string ResourcesFilesFolder = "common-files\\resources";
+         private const string ResourcesFilesFolder = "common-files\\resources";
 
          public static string GetExecutingLocation()
          {

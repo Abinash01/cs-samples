@@ -4,11 +4,7 @@ using Leadtools.Forms.DocumentWriters;
 using Leadtools.Forms.Ocr;
 using Leadtools.ImageProcessing.Core;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace demo_cs_convert_to_pdf.Convert
 {
@@ -16,18 +12,18 @@ namespace demo_cs_convert_to_pdf.Convert
    {
       public static void ExportPdfImage( string filename )
       {
-         string outputFile = Path.Combine( Leadtools.Demo.Support.Path.GetOutputPath(), Path.GetFileNameWithoutExtension( filename ) + "_Image.pdf" );
+         var outputFile = Path.Combine( Leadtools.Demo.Support.Path.GetOutputPath(), Path.GetFileNameWithoutExtension( filename ) + "_Image.pdf" );
 
          // Create instance of RasterCodecs object to load and save the file
          // https://www.leadtools.com/help/leadtools/v19/dh/co/leadtools.codecs~leadtools.codecs.rastercodecs.html
-         using ( RasterCodecs codecs = new RasterCodecs() )
+         using ( var codecs = new RasterCodecs() )
          {
             // We want to load all the pages of the file
             codecs.Options.Load.AllPages = true;
 
             // Load the image
             // https://www.leadtools.com/help/leadtools/v19/dh/l/leadtools~leadtools.rasterimage.html
-            using ( RasterImage image = codecs.Load( filename ) )
+            using ( var image = codecs.Load( filename ) )
             {
                if ( image.BitsPerPixel != 1 )
                {
@@ -44,15 +40,11 @@ namespace demo_cs_convert_to_pdf.Convert
 
       public static void ExportPdfDocument( string filename )
       {
-         string outputFile = Path.Combine( Leadtools.Demo.Support.Path.GetOutputPath(), Path.GetFileNameWithoutExtension( filename ) + "_Document.pdf" );
-
-         // https://www.leadtools.com/help/leadtools/v19/dh/ft/leadtools.forms.documentwriters~leadtools.forms.documentwriters.pdfdocumentoptions.html
-         var pdfOptions = new PdfDocumentOptions();
-         pdfOptions.ImageOverText = true;
+         var outputFile = Path.Combine( Leadtools.Demo.Support.Path.GetOutputPath(), Path.GetFileNameWithoutExtension( filename ) + "_Document.pdf" );
 
          // Create an instance of the OCR Engine
          // https://www.leadtools.com/help/leadtools/v19/dh/fo/leadtools.forms.ocr~leadtools.forms.ocr.iocrengine.html
-         using ( IOcrEngine ocrEngine = OcrEngineManager.CreateEngine( OcrEngineType.Advantage, false ) )
+         using ( var ocrEngine = OcrEngineManager.CreateEngine( OcrEngineType.Advantage, false ) )
          {
             // Startup the engine using default parameters
             // https://www.leadtools.com/help/leadtools/v19/dh/fo/leadtools.forms.ocr~leadtools.forms.ocr.iocrengine~startup.html
@@ -67,7 +59,7 @@ namespace demo_cs_convert_to_pdf.Convert
 
       public static void ExportPdfViaSvg( string filename )
       {
-         string outputFile = Path.Combine( Leadtools.Demo.Support.Path.GetOutputPath(), Path.GetFileNameWithoutExtension( filename ) + "_Svg.pdf" );
+         var outputFile = Path.Combine( Leadtools.Demo.Support.Path.GetOutputPath(), Path.GetFileNameWithoutExtension( filename ) + "_Svg.pdf" );
 
          // Setup a new RasterCodecs object
          using ( var codecs = new RasterCodecs() )
@@ -91,25 +83,27 @@ namespace demo_cs_convert_to_pdf.Convert
             // Set the PDF options
             // https://www.leadtools.com/help/leadtools/v19/dh/ft/leadtools.forms.documentwriters~leadtools.forms.documentwriters.pdfdocumentoptions.html
             var pdfOptions = docWriter.GetOptions( DocumentFormat.Pdf ) as PdfDocumentOptions;
-            pdfOptions.DocumentType = PdfDocumentType.Pdf;
-            docWriter.SetOptions( DocumentFormat.Pdf, pdfOptions );
+            if (pdfOptions != null)
+            {
+               pdfOptions.DocumentType = PdfDocumentType.Pdf;
+               docWriter.SetOptions( DocumentFormat.Pdf, pdfOptions );
+            }
 
             // Create a new PDF document
             docWriter.BeginDocument( outputFile, DocumentFormat.Pdf );
 
-            string message = "";
-            int lastMessageLen = message.Length;
+            var message = "";
             // Loop through all the pages
             for ( var pageNumber = 1; pageNumber <= pageCount; pageNumber++ )
             {
                // Get the page as SVG
                // https://www.leadtools.com/help/leadtools/v19/dh/co/leadtools.codecs~leadtools.codecs.rastercodecs~loadsvg.html
                var page = new DocumentSvgPage();
-               lastMessageLen = message.Length;
+               var lastMessageLen = message.Length;
                
                message = string.Format("\rConverting page {0} of {1}", pageNumber, pageCount);
-               int diff = lastMessageLen - message.Length;
-               Console.Write( "{0}{1}", message, ( diff > 0 ? new String( ' ', diff ) : "" ) );
+               var diff = lastMessageLen - message.Length;
+               Console.Write( "{0}{1}", message, ( diff > 0 ? new string( ' ', diff ) : "" ) );
                using ( page.SvgDocument = codecs.LoadSvg( filename, pageNumber, null ) )
                {
                   // Add the page
