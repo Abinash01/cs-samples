@@ -65,7 +65,7 @@ namespace Leadtools.Demo
 
       internal static class Path
       {
-         public const string RelativePathToRoot = "..\\..";
+         public const string RelativePathToRoot = "..\\..\\..\\Examples\\DotNet\\GitHub";
          private const string ResourcesFilesFolder = "common-files\\resources";
 
          public static string GetExecutingLocation()

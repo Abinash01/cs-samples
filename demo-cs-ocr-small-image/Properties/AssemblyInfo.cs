@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Minimum_OCR_Console_19")]
+[assembly: AssemblyTitle( "demo-cs-ocr-small-image" )]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Minimum_OCR_Console_19")]
+[assembly: AssemblyProduct( "demo-cs-ocr-small-image" )]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8c27db4e-068e-4033-a923-b4aa86aa5ee8")]
+[assembly: Guid( "D2A95B7E-F3DE-48C8-881A-A16E0E9DDD02" )]
 
 // Version information for an assembly consists of the following four values:
 //
