@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-
+ 
 namespace Pdf_Redaction_Ocr
 {
     internal static class Program
