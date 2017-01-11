@@ -41,11 +41,9 @@ namespace Pdf_Redaction_Ocr
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_automationControl != null)
-                _automationControl.Dispose();
+            _automationControl?.Dispose();
 
-            if (_automationManagerHelper != null)
-                _automationManagerHelper.Dispose();
+            _automationManagerHelper?.Dispose();
 
             if (_imageViewer == null) return;
             if (_imageViewer.HasImage)
@@ -104,8 +102,8 @@ namespace Pdf_Redaction_Ocr
                 ocrEngine.Startup(null, null, null, null);
 
                 var pdfOptions = ocrEngine.DocumentWriterInstance.GetOptions(DocumentFormat.Pdf) as PdfDocumentOptions;
-                if (pdfOptions == null) throw new ApplicationException("Failed to set PDF Options");
 
+                // ReSharper disable once PossibleNullReferenceException
                 pdfOptions.ImageOverText = true;
                 ocrEngine.DocumentWriterInstance.SetOptions(DocumentFormat.Pdf, pdfOptions);
 
