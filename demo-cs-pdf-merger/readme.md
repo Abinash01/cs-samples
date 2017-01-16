@@ -1,6 +1,6 @@
 ﻿![PDF Banner][1]
 
-# PDF Duplexer
+# PDF Merger
 
 ## Merge Two PDF Files
 
