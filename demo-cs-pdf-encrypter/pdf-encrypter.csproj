@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <LeadConfigPath>..\..\..\Bin\Dotnet4\Win32\</LeadConfigPath>
+    <OutputPath>$(LeadConfigPath)</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <LeadConfigPath>..\..\..\Bin\Dotnet4\Win32\</LeadConfigPath>
+    <OutputPath>$(LeadConfigPath)</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>avatar.ico</ApplicationIcon>
+    <ProjectGuid>{DAE8EDAE-A615-4C45-BA67-6D32454938CD}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>pdf-encrypter</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Leadtools">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(LeadConfigPath)Leadtools.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Leadtools.Codecs">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(LeadConfigPath)Leadtools.Codecs.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Leadtools.Pdf">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(LeadConfigPath)Leadtools.Pdf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ContextMenu\FileShellExtension.cs" />
+    <Compile Include="PdfEncrypt.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="..\..\..\Common\License\LEADTOOLS.LIC">
+      <Link>LEADTOOLS.LIC</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\Common\License\LEADTOOLS.LIC.KEY">
+      <Link>LEADTOOLS.LIC.KEY</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+    <None Include="readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="avatar.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
