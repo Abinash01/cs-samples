@@ -14,7 +14,7 @@ namespace demo_cs_ocr_small_image
       {
          if ( Leadtools.Demo.Support.Licensing.SetLicense() == false )
             return;
-         var file = Path.Combine( Leadtools.Demo.Support.Path.GetResourcesPath(), "small-low-res-img.png" );
+         var file = Path.Combine( Leadtools.Demo.Support.Path.GetExecutingLocation(), "small-low-res-img.png" );
          var results = PreProcessAndRecognizeSmallImage( file );
          Console.Write(results);
       }

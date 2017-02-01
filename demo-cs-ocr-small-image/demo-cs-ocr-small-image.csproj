@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <LeadConfigPath>..\..\..\..\Bin\DotNet4\Win32\</LeadConfigPath>
+    <LeadConfigPath>..\..\..\Bin\DotNet4\Win32\</LeadConfigPath>
     <OutputPath>$(LeadConfigPath)</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -30,7 +30,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <LeadConfigPath>..\..\..\..\Bin\DotNet4\Win32\</LeadConfigPath>
+    <LeadConfigPath>..\..\..\Bin\DotNet4\Win32\</LeadConfigPath>
     <OutputPath>$(LeadConfigPath)</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -40,26 +40,32 @@
     <Reference Include="Leadtools">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(LeadConfigPath)Leadtools.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-     <Reference Include="Leadtools.ImageProcessing.Core">
-     <SpecificVersion>False</SpecificVersion>
-     <HintPath>$(LeadConfigPath)Leadtools.ImageProcessing.Core.dll</HintPath>
-     </Reference>
+    <Reference Include="Leadtools.ImageProcessing.Core">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(LeadConfigPath)Leadtools.ImageProcessing.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Leadtools.Codecs">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(LeadConfigPath)Leadtools.Codecs.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Leadtools.Forms">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(LeadConfigPath)Leadtools.Forms.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Leadtools.Forms.DocumentWriters">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(LeadConfigPath)Leadtools.Forms.DocumentWriters.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Leadtools.Forms.Ocr">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(LeadConfigPath)Leadtools.Forms.Ocr.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -79,6 +85,11 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="small-low-res-img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

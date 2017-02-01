@@ -9,14 +9,14 @@ namespace ConvertPdfToTif
    {
       private static void Main()
       {
-         const string filePath = "C:\\LEADTOOLS 19\\Examples\\DotNet\\GitHub\\ConvertPdfToTif\\Files\\fax.pdf";
+         const string filePath = @"C:\LEADTOOLS 19\Examples\Git\ConvertPdfToTif\Files\fax.pdf";
          if ( SetLicense() )
             ConvertPdfToTif( filePath );
       }
 
       private static bool SetLicense()
       {
-         const string licenseFile = "..\\..\\..\\common\\license\\leadtools.lic";
+         const string licenseFile = @"..\..\..\common\license\leadtools.lic";
          try
          {
             var developerKey = File.ReadAllText( licenseFile + ".key" );
@@ -24,7 +24,7 @@ namespace ConvertPdfToTif
 
             if ( RasterSupport.KernelExpired )
             {
-               Console.WriteLine( "Kernel Expired!\nPress [Enter] to exit." );
+               Console.WriteLine( "LEADTOOLS License has Expired!\nPress [Enter] to exit." );
                Console.ReadLine();
             }
          }
@@ -48,32 +48,32 @@ namespace ConvertPdfToTif
                      + ".tif";
          try
          {
-            using ( var codecs = new RasterCodecs() )
+         using ( var codecs = new RasterCodecs() )
+         {
+            var info = codecs.GetInformation( fileName, true );
+            for ( var pageNumber = 1; pageNumber <= info.TotalPages; pageNumber++ )
             {
-               var info = codecs.GetInformation( fileName, true );
-               for ( var pageNumber = 1; pageNumber <= info.TotalPages; pageNumber++ )
-               {
-                  // Make sure the resulting img has the original resolution
-                  var pdfInfo = codecs.GetRasterPdfInfo( fileName, pageNumber );
-                  codecs.Options.RasterizeDocument.Load.XResolution = pdfInfo.XResolution;
-                  codecs.Options.RasterizeDocument.Load.YResolution = pdfInfo.YResolution;
+               // Make sure the resulting img has the original resolution
+               var pdfInfo = codecs.GetRasterPdfInfo( fileName, pageNumber );
+               codecs.Options.RasterizeDocument.Load.XResolution = pdfInfo.XResolution;
+               codecs.Options.RasterizeDocument.Load.YResolution = pdfInfo.YResolution;
 
-                  // Save the file using a format appropriate for the bits per pixel
-                  var bpp = pdfInfo.BitsPerPixel;
-                  var saveFormat = RasterImageFormat.Tif;
+               // Save the file using a format appropriate for the bits per pixel
+               var bpp = pdfInfo.BitsPerPixel;
+               var saveFormat = RasterImageFormat.Tif;
 
-                  if ( bpp == 1 )
-                     saveFormat = RasterImageFormat.CcittGroup4;
-                  else if ( bpp > 1 && bpp < 9 )
-                     saveFormat = RasterImageFormat.TifLzw;
-                  else if ( bpp == 24 )
-                     saveFormat = RasterImageFormat.TifJpeg;
+               if ( bpp == 1 )
+                  saveFormat = RasterImageFormat.CcittGroup4;
+               else if ( bpp > 1 && bpp < 9 )
+                  saveFormat = RasterImageFormat.TifLzw;
+               else if ( bpp == 24 )
+                  saveFormat = RasterImageFormat.TifJpeg;
 
-                  using ( var page = codecs.Load( fileName, pageNumber ) )
-                     codecs.Save( page, getSaveFileName( pageNumber ), saveFormat, 0 );
-               }
+               using ( var page = codecs.Load( fileName, pageNumber ) )
+                  codecs.Save( page, getSaveFileName( pageNumber ), saveFormat, 0 );
             }
-            Console.WriteLine( "Done" );
+         }
+         Console.WriteLine( "Done" );
          }
          catch ( Exception ex )
          {
